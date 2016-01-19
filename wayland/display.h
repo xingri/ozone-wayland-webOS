@@ -16,7 +16,11 @@
 
 #include "base/basictypes.h"
 #include "ozone/ui/events/window_state_change_handler.h"
+#if defined(WEBOS)
+#include "wayland-text-client-protocol.h"
+#else
 #include "ozone/wayland/input/text-client-protocol.h"
+#endif
 #include "ui/ozone/public/surface_factory_ozone.h"
 
 namespace ozonewayland {
@@ -57,7 +61,11 @@ class WaylandDisplay : public ui::WindowStateChangeHandler,
 
   wl_shm* shm() const { return shm_; }
   wl_compositor* GetCompositor() const { return compositor_; }
+#if defined(WEBOS)
+  struct text_model_factory* GetTextModelFactory() const;
+#else
   struct wl_text_input_manager* GetTextInputManager() const;
+#endif
 
   int GetDisplayFd() const { return wl_display_get_fd(display_); }
   unsigned GetSerial() const { return serial_; }
@@ -148,7 +156,11 @@ class WaylandDisplay : public ui::WindowStateChangeHandler,
   wl_compositor* compositor_;
   WaylandShell* shell_;
   wl_shm* shm_;
+#if defined(WEBOS)
+  struct text_model_factory* text_model_factory_;
+#else
   struct wl_text_input_manager* text_input_manager_;
+#endif
   WaylandScreen* primary_screen_;
   WaylandScreen* look_ahead_screen_;
   WaylandInputDevice* primary_input_;

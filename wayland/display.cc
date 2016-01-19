@@ -30,6 +30,9 @@ WaylandDisplay::WaylandDisplay() : SurfaceFactoryOzone(),
     compositor_(NULL),
     shell_(NULL),
     shm_(NULL),
+#if defined(WEBOS)
+    text_model_factory_(NULL),
+#endif
     primary_screen_(NULL),
     look_ahead_screen_(NULL),
     primary_input_(NULL),
@@ -53,9 +56,15 @@ WaylandWindow* WaylandDisplay::GetWindow(unsigned window_handle) const {
   return GetWidget(window_handle);
 }
 
+#if defined(WEBOS)
+struct text_model_factory* WaylandDisplay::GetTextModelFactory() const {
+  return text_model_factory_;
+}
+#else
 struct wl_text_input_manager* WaylandDisplay::GetTextInputManager() const {
   return text_input_manager_;
 }
+#endif
 
 void WaylandDisplay::FlushDisplay() {
   wl_display_flush(display_);
@@ -430,10 +439,19 @@ void WaylandDisplay::DisplayHandleGlobal(void *data,
   } else if (strcmp(interface, "wl_shm") == 0) {
     disp->shm_ = static_cast<wl_shm*>(
         wl_registry_bind(registry, name, &wl_shm_interface, 1));
-  } else if (strcmp(interface, "wl_text_input_manager") == 0) {
+  }
+#if defined(WEBOS)
+    else if (strcmp(interface, "text_model_factory") == 0) {
+    disp->text_model_factory_ = static_cast<text_model_factory*>(
+        wl_registry_bind(registry, name, &text_model_factory_interface, 1));
+  }
+#else
+  else if (strcmp(interface, "wl_text_input_manager") == 0) {
     disp->text_input_manager_ = static_cast<wl_text_input_manager*>(
         wl_registry_bind(registry, name, &wl_text_input_manager_interface, 1));
-  } else {
+  }
+#endif
+  else {
     disp->shell_->Initialize(registry, name, interface, version);
   }
 }

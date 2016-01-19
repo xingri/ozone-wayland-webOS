@@ -10,7 +10,11 @@
 #include "ozone/wayland/input/cursor.h"
 #include "ozone/wayland/input/keyboard.h"
 #include "ozone/wayland/input/pointer.h"
+#if defined(WEBOS)
+#include "ozone/wayland/input/webos_text_input.h"
+#else
 #include "ozone/wayland/input/text_input.h"
+#endif
 #include "ozone/wayland/input/touchscreen.h"
 
 namespace ozonewayland {
