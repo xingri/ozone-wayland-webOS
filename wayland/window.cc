@@ -84,7 +84,11 @@ void WaylandWindow::SetFullscreen() {
 void WaylandWindow::RealizeAcceleratedWidget() {
   if (!shell_surface_) {
     LOG(ERROR) << "Shell type not set. Setting it to TopLevel";
+#if defined(WEBOS)
+    SetShellAttributes(FULLSCREEN);
+#else
     SetShellAttributes(TOPLEVEL);
+#endif
   }
 
   if (!window_)
