@@ -6,6 +6,9 @@
 #define OZONE_WAYLAND_SHELL_SHELL_H_
 
 #include <wayland-client.h>
+#if defined(WEBOS)
+#include "wayland-webos-shell-client-protocol.h"
+#endif
 
 #include "base/basictypes.h"
 
@@ -29,6 +32,9 @@ class WaylandShell {
                   uint32_t version);
 
   wl_shell* GetWLShell() const { return shell_; }
+#if defined(WEBOS)
+  wl_webos_shell* GetWebosWLShell() const { return webos_shell_; }
+#endif
   xdg_shell* GetXDGShell() const { return xdg_shell_; }
 
  private:
@@ -38,6 +44,9 @@ class WaylandShell {
                             uint32_t serial);
 #endif
   wl_shell* shell_;
+#if defined(WEBOS)
+  wl_webos_shell* webos_shell_;
+#endif
   xdg_shell* xdg_shell_;
   DISALLOW_COPY_AND_ASSIGN(WaylandShell);
 };

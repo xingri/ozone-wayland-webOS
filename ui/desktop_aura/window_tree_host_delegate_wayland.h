@@ -61,6 +61,9 @@ class WindowTreeHostDelegateWayland
                                 const std::string& text,
                                 const std::string& commit) OVERRIDE;
   virtual void OnCommit(unsigned handle, const std::string& text) OVERRIDE;
+#if defined(WEBOS)
+  virtual void OnWebosWindowClose(unsigned handle) OVERRIDE;
+#endif
 
   // Dispatches a mouse event.
   void DispatchMouseEvent(ui::MouseEvent* event);

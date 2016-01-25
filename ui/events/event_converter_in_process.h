@@ -53,6 +53,9 @@ class EventConverterInProcess : public ui::EventConverterOzoneWayland,
                               const std::string& commit) OVERRIDE;
   virtual void PreeditEnd() OVERRIDE;
   virtual void PreeditStart() OVERRIDE;
+#if defined(WEBOS)
+  virtual void CloseWindow(unsigned handle) OVERRIDE;
+#endif
 
   virtual void SetWindowChangeObserver(
       ui::WindowChangeObserver* observer) OVERRIDE;
@@ -112,6 +115,9 @@ class EventConverterInProcess : public ui::EventConverterOzoneWayland,
                                    const std::string& commit);
   static void NotifyPreeditEnd(EventConverterInProcess* data);
   static void NotifyPreeditStart(EventConverterInProcess* data);
+#if defined(WEBOS)
+  static void NotifyCloseWindow(EventConverterInProcess* data, unsigned handle);
+#endif
 
   ui::WindowChangeObserver* observer_;
   ui::OutputChangeObserver* output_observer_;

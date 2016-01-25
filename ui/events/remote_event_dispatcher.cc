@@ -101,6 +101,12 @@ void RemoteEventDispatcher::PreeditStart() {
   Dispatch(new WaylandInput_PreeditStart());
 }
 
+#if defined(WEBOS)
+void RemoteEventDispatcher::CloseWindow(unsigned handle) {
+  Dispatch(new WaylandWindow_CloseWindow(handle));
+}
+#endif
+
 void RemoteEventDispatcher::Dispatch(IPC::Message* message) {
     ui::EventConverterOzoneWayland::PostTaskOnMainLoop(
           base::Bind(&RemoteEventDispatcher::Send, this, message));

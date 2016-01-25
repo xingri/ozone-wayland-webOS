@@ -54,6 +54,9 @@ class OZONE_WAYLAND_EXPORT EventConverterOzoneWayland {
                               const std::string& commit) = 0;
   virtual void PreeditEnd() = 0;
   virtual void PreeditStart() = 0;
+#if defined(WEBOS)
+  virtual void CloseWindow(unsigned handle) = 0;
+#endif
 
   // Sets the window change observer. Ownership is retained by the caller.
   virtual void SetWindowChangeObserver(WindowChangeObserver* observer);

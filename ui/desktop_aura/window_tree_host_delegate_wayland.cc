@@ -306,4 +306,14 @@ void WindowTreeHostDelegateWayland::OnPreeditChanged(unsigned handle,
   window->HandlePreeditChanged(text, commit);
 }
 
+#if defined(WEBOS)
+void WindowTreeHostDelegateWayland::OnWebosWindowClose(unsigned handle) {
+  DesktopWindowTreeHostWayland* window =
+      DesktopWindowTreeHostWayland::GetHostForAcceleratedWidget(handle);
+  DCHECK(window);
+  window->OnCaptureReleased();
+  window->Close();
+}
+#endif
+
 }  // namespace views

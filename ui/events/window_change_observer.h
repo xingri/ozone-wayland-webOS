@@ -33,6 +33,9 @@ class OZONE_WAYLAND_EXPORT WindowChangeObserver {
                                 const std::string& text,
                                 const std::string& commit) = 0;
   virtual void OnCommit(unsigned handle, const std::string& text) = 0;
+#if defined(WEBOS)
+  virtual void OnWebosWindowClose(unsigned handle) = 0;
+#endif
 
  protected:
   virtual ~WindowChangeObserver() {}

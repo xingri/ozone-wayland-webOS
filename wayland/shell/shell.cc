@@ -11,17 +11,27 @@
 #include "ozone/wayland/shell/xdg-shell-client-protocol.h"
 #include "ozone/wayland/shell/xdg_shell_surface.h"
 #endif
+#if defined(WEBOS)
+#include "ozone/wayland/shell/webos_shell_surface.h"
+#endif
 
 namespace ozonewayland {
 
 WaylandShell::WaylandShell()
     : shell_(NULL),
+#if defined(WEBOS)
+      webos_shell_(NULL),
+#endif
       xdg_shell_(NULL) {
 }
 
 WaylandShell::~WaylandShell() {
   if (shell_)
     wl_shell_destroy(shell_);
+#if defined(WEBOS)
+  if (webos_shell_)
+    wl_webos_shell_destroy(webos_shell_);
+#endif
 #if defined(ENABLE_XDG_SHELL)
   if (xdg_shell_)
     xdg_shell_destroy(xdg_shell_);
@@ -36,6 +46,10 @@ WaylandShellSurface* WaylandShell::CreateShellSurface(WaylandWindow* window) {
 #if defined(ENABLE_XDG_SHELL)
   if (xdg_shell_)
     surface = new XDGShellSurface();
+#endif
+#if defined(WEBOS)
+  if (webos_shell_ && !surface)
+    surface = new WebosShellSurface();
 #endif
   if (!surface)
     surface = new WLShellSurface();
@@ -56,6 +70,12 @@ void WaylandShell::Initialize(struct wl_registry *registry,
     DCHECK(!shell_);
     shell_ = static_cast<wl_shell*>(
         wl_registry_bind(registry, name, &wl_shell_interface, 1));
+#if defined(WEBOS)
+  } else if (strcmp(interface, "wl_webos_shell") == 0) {
+    DCHECK(!webos_shell_);
+    webos_shell_ = static_cast<wl_webos_shell*>(
+        wl_registry_bind(registry, name, &wl_webos_shell_interface, 1));
+#endif
 #if defined(ENABLE_XDG_SHELL)
   } else if ((strcmp(interface, "xdg_shell") == 0) && getenv("OZONE_WAYLAND_USE_XDG_SHELL")) {
       DCHECK(!xdg_shell_);

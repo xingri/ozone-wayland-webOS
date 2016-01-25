@@ -392,6 +392,11 @@ void WaylandDisplay::Terminate() {
   if (shm_)
     wl_shm_destroy(shm_);
 
+#if defined(WEBOS)
+  if(text_model_factory_)
+    text_model_factory_destroy(text_model_factory_);
+#endif
+
   if (registry_)
     wl_registry_destroy(registry_);
 

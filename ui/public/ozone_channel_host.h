@@ -50,6 +50,9 @@ class OzoneChannelHost : public GpuPlatformSupportHost {
   void OnPreeditChanged(unsigned handle, std::string text, std::string commit);
   void OnPreeditEnd();
   void OnPreeditStart();
+#if defined(WEBOS)
+  void OnCloseWindow(unsigned handle);
+#endif
 
  private:
   RemoteStateChangeHandler* state_handler_;

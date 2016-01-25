@@ -111,6 +111,11 @@ IPC_MESSAGE_CONTROL0(WaylandWindow_ShowInputPanel)  // NOLINT(readability/
 IPC_MESSAGE_CONTROL0(WaylandWindow_HideInputPanel)  // NOLINT(readability/
                                                    //         fn_size)
 
+#if defined(WEBOS)
+IPC_MESSAGE_CONTROL1(WaylandWindow_CloseWindow,  // NOLINT(readability/fn_size)
+                     unsigned /*handle*/)
+#endif
+
 IPC_MESSAGE_CONTROL2(WaylandInput_Commit,  // NOLINT(readability/fn_size)
                      unsigned,
                      std::string)

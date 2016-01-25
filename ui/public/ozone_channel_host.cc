@@ -60,6 +60,9 @@ bool OzoneChannelHost::OnMessageReceived(const IPC::Message& message) {
   IPC_MESSAGE_HANDLER(WaylandInput_PreeditChanged, OnPreeditChanged)
   IPC_MESSAGE_HANDLER(WaylandInput_PreeditEnd, OnPreeditEnd)
   IPC_MESSAGE_HANDLER(WaylandInput_PreeditStart, OnPreeditStart)
+#if defined(WEBOS)
+  IPC_MESSAGE_HANDLER(WaylandWindow_CloseWindow, OnCloseWindow)
+#endif
   IPC_MESSAGE_UNHANDLED(handled = false)
   IPC_END_MESSAGE_MAP()
 
@@ -140,5 +143,11 @@ void OzoneChannelHost::OnPreeditEnd() {
 
 void OzoneChannelHost::OnPreeditStart() {
 }
+
+#if defined(WEBOS)
+void OzoneChannelHost::OnCloseWindow(unsigned handle) {
+  event_converter_->CloseWindow(handle);
+}
+#endif
 
 }  // namespace ui

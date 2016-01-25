@@ -56,6 +56,9 @@ class RemoteEventDispatcher : public ui::EventConverterOzoneWayland {
                               const std::string& commit) OVERRIDE;
   virtual void PreeditEnd() OVERRIDE;
   virtual void PreeditStart() OVERRIDE;
+#if defined(WEBOS)
+  virtual void CloseWindow(unsigned handle) OVERRIDE;
+#endif
 
  private:
   void Dispatch(IPC::Message* message);

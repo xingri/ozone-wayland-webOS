@@ -117,6 +117,13 @@ void EventConverterInProcess::PreeditStart() {
         &EventConverterInProcess::NotifyPreeditStart, this));
 }
 
+#if defined(WEBOS)
+void EventConverterInProcess::CloseWindow(unsigned handle) {
+  ui::EventConverterOzoneWayland::PostTaskOnMainLoop(base::Bind(
+      &EventConverterInProcess::NotifyCloseWindow, this, handle));
+}
+#endif
+
 void EventConverterInProcess::SetWindowChangeObserver(
     ui::WindowChangeObserver* observer) {
   observer_ = observer;
@@ -263,5 +270,14 @@ EventConverterInProcess::NotifyPreeditEnd(EventConverterInProcess* data) {
 void
 EventConverterInProcess::NotifyPreeditStart(EventConverterInProcess* data) {
 }
+
+#if defined(WEBOS)
+void
+EventConverterInProcess::NotifyCloseWindow(EventConverterInProcess* data,
+                                           unsigned handle) {
+  if (data->observer_)
+    data->observer_->OnWebosWindowClose(handle);
+}
+#endif
 
 }  // namespace ui
